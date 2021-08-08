@@ -1,5 +1,5 @@
 package com.example.himanshutestheptagon.util
 
 object AppConstant {
-    const val MIN_PASSWORD_LENGTH = 3
+    const val URL = "http://www.json-generator.com/api/json/get/cpOAeecWGa?indent=2"
 }
