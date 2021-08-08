@@ -12,6 +12,6 @@ data class Question(
     val question: String,
     val question_id: Int,
     val type: String,
-    val url: String?="https://dummyimage.com/600x400/000/fff",
+    var url: String?="",
     val values: List<Value>
 )

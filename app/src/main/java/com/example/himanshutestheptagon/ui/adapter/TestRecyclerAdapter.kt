@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.text.InputFilter
 import android.text.InputFilter.LengthFilter
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -133,6 +134,7 @@ internal class TestRecyclerAdapter(val mListener: (Question) -> Unit) :
             }
 
             else if (data.type=="imageview") {
+                Log.d("himanshu", "onBind: ${data.url.toString()}")
                 binding.etAnswers.visibility = View.GONE
                 binding.llField.visibility = View.GONE
             }

@@ -1,6 +1,15 @@
 package com.example.himanshutestheptagon.module
 
 import android.content.Context
+import com.bumptech.glide.Glide
+import com.bumptech.glide.Glide.with
+import com.bumptech.glide.Registry
+import com.bumptech.glide.RequestManager
+import com.bumptech.glide.annotation.GlideModule
+import com.bumptech.glide.integration.okhttp3.OkHttpUrlLoader
+import com.bumptech.glide.load.model.GlideUrl
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.with
+import com.bumptech.glide.module.AppGlideModule
 import com.example.himanshutestheptagon.BuildConfig
 import com.example.himanshutestheptagon.data.api.ApiHelper
 import com.example.himanshutestheptagon.data.api.ApiHelperImpl
@@ -13,6 +22,8 @@ import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.components.FragmentComponent
+import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.CacheControl
@@ -21,6 +32,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import java.io.InputStream
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -86,5 +98,13 @@ class AppModule {
                 .header("Cache-Control", cacheControl.toString())
                 .build()
         }
+    }
+
+    @Module
+    @InstallIn(FragmentComponent::class)
+    class HiltModule {
+        @Provides
+        fun provideGlide(@ActivityContext context: Context): RequestManager = Glide.with(context)
+
     }
 }

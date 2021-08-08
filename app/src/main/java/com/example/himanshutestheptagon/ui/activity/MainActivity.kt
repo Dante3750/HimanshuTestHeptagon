@@ -82,12 +82,13 @@ class MainActivity : AppCompatActivity() {
             when (value.status) {
                 Status.SUCCESS -> {
                     val list = value?.data?.questions
+                    Log.d("data", "iniObser: $list")
                     if (list != null) {
                         listItemData.clear()
                         listItemData.addAll(list)
                     }
                     adapter.replaceItems(listItemData)
-                    Log.d("data", "iniObser: ${value.data}")
+
 
                     binding.progressBar.visibility = View.GONE
                     binding.llRetry.visibility = View.GONE
