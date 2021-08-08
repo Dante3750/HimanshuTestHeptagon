@@ -1,16 +1,16 @@
 package com.example.himanshutestheptagon.ui.activity
 
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import com.example.himanshutestheptagon.R
-import com.example.himanshutestheptagon.data.model.ItemList
 import com.example.himanshutestheptagon.data.model.Question
 import com.example.himanshutestheptagon.databinding.ActivityMainBinding
 import com.example.himanshutestheptagon.ui.adapter.TestRecyclerAdapter
@@ -18,6 +18,7 @@ import com.example.himanshutestheptagon.ui.viewmodel.MainViewModel
 import com.example.himanshutestheptagon.util.showNormalToast
 import dagger.hilt.android.AndroidEntryPoint
 import life.alhilal.utils.Status
+
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -48,8 +49,29 @@ class MainActivity : AppCompatActivity() {
         viewModel.getList()
         iniObser()
         setView()
+        swipe()
+        retry()
 
 
+    }
+
+    private fun retry() {
+        binding.llRetry.setOnClickListener {
+            setItems()
+        }
+    }
+
+    private fun swipe() {
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            binding.swipeRefreshLayout.isRefreshing = false
+            setItems()
+        }
+    }
+
+    private fun setItems() {
+        listItemData.clear()
+        adapter.notifyDataSetChanged()
+       viewModel.getList()
     }
 
     private fun iniObser() {
@@ -60,18 +82,22 @@ class MainActivity : AppCompatActivity() {
                 Status.SUCCESS -> {
                     val list = value?.data?.questions
                     if (list != null) {
+                        listItemData.clear()
                         listItemData.addAll(list)
                     }
                     adapter.replaceItems(listItemData)
                     Log.d("data", "iniObser: ${value.data}")
 
                     binding.progressBar.visibility = View.GONE
+                    binding.llRetry.visibility = View.GONE
                 }
                 Status.LOADING -> {
                     binding.progressBar.visibility = View.VISIBLE
+                    binding.llRetry.visibility = View.GONE
                 }
                 Status.ERROR, Status.NO_INTERNET -> {
                     binding.progressBar.visibility = View.GONE
+                    binding.llRetry.visibility = View.VISIBLE
                     value.message?.let { it1 ->
                         showNormalToast(this,it1)
                     }

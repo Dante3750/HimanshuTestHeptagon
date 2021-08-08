@@ -20,7 +20,7 @@ import kotlin.collections.ArrayList
 
 
 internal class TestRecyclerAdapter(val mListener: (Question) -> Unit) :
-    RecyclerView.Adapter<TestRecyclerAdapter.DrugAdapterAdapterViewHolder>() {
+    RecyclerView.Adapter<TestRecyclerAdapter.TestAdapterViewHolder>() {
 
 
     var list1: ArrayList<Question> = arrayListOf()
@@ -32,21 +32,21 @@ internal class TestRecyclerAdapter(val mListener: (Question) -> Unit) :
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): DrugAdapterAdapterViewHolder {
+    ): TestAdapterViewHolder {
         val binding =
             ListItemTestBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
             )
-        return DrugAdapterAdapterViewHolder(binding)
+        return TestAdapterViewHolder(binding)
     }
 
     /** It is called for each ViewHolder to bind it to the adapter &
      * This is where we pass data to ViewHolder
      * */
     @SuppressLint("LogNotTimber", "SetTextI18n")
-    override fun onBindViewHolder(holder: DrugAdapterAdapterViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: TestAdapterViewHolder, position: Int) {
         holder.onBind(getItem(position), position)
     }
 
@@ -82,7 +82,7 @@ internal class TestRecyclerAdapter(val mListener: (Question) -> Unit) :
         notifyDataSetChanged()
     }
 
-    inner class DrugAdapterAdapterViewHolder(val dataBinding: ListItemTestBinding) :
+    inner class TestAdapterViewHolder(val dataBinding: ListItemTestBinding) :
         RecyclerView.ViewHolder(dataBinding.root) {
 
         init {
@@ -98,10 +98,14 @@ internal class TestRecyclerAdapter(val mListener: (Question) -> Unit) :
 
             if (data.type=="text" ||data.type=="emailtext"){
                 binding.etAnswers.visibility = View.VISIBLE
+                binding.ivLoad.visibility = View.GONE
 
             }
             else if (data.type=="radio"){
                 binding.etAnswers.visibility = View.GONE
+                binding.ivLoad.visibility = View.GONE
+                binding.rgList.removeAllViews()
+                binding.llField.removeAllViews()
                 for (element in data.values) {
                     addRadioButtonLive(binding,element)
                     addRadioDates(binding,element)
@@ -109,14 +113,18 @@ internal class TestRecyclerAdapter(val mListener: (Question) -> Unit) :
             }
 
             else if (data.type=="multiselect"){
+                binding.llField.removeAllViews()
                 binding.etAnswers.visibility = View.GONE
+                binding.ivLoad.visibility = View.GONE
                 for (element in data.values) {
                     addCheckBoxLive(binding,element)
                 }
             }
 
             else if (data.type=="dropdown") {
+                binding.llField.removeAllViews()
                 binding.etAnswers.visibility = View.GONE
+                binding.ivLoad.visibility = View.GONE
                 val list = ArrayList<String>()
                 for (element in data.values) {
                     list.add(element.value)
@@ -126,7 +134,7 @@ internal class TestRecyclerAdapter(val mListener: (Question) -> Unit) :
 
             else if (data.type=="imageview") {
                 binding.etAnswers.visibility = View.GONE
-                loadImage()
+                binding.llField.visibility = View.GONE
             }
             else{
                 binding.etAnswers.visibility = View.GONE
@@ -142,9 +150,6 @@ internal class TestRecyclerAdapter(val mListener: (Question) -> Unit) :
 
         }
 
-        private fun loadImage() {
-            TODO("Not yet implemented")
-        }
 
         private fun addDropDownLive(binding: ListItemTestBinding, element: ArrayList<String>) {
             val spinner = Spinner(context)

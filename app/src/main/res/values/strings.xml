@@ -5,4 +5,6 @@
     <string name="question_id">Question Id</string>
     <string name="question_type">Question Type</string>
     <string name="please_enter_your_answer">Please Enter Your Answer</string>
+    <string name="no_network_connection">No Network Connection</string>
+    <string name="retry">Retry</string>
 </resources>
