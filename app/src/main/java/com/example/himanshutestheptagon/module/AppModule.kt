@@ -1,12 +1,28 @@
 package com.example.himanshutestheptagon.module
 
+import android.content.Context
+import com.example.himanshutestheptagon.BuildConfig
+import com.example.himanshutestheptagon.data.api.ApiHelper
+import com.example.himanshutestheptagon.data.api.ApiHelperImpl
+import com.example.himanshutestheptagon.data.api.ApiService
+import com.example.himanshutestheptagon.util.AppConstant
 import com.example.himanshutestheptagon.util.DefaultIfNullFactory
 import com.example.himanshutestheptagon.util.EmptyStringAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
+import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import okhttp3.CacheControl
+import okhttp3.Interceptor
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
+import retrofit2.converter.moshi.MoshiConverterFactory
+import java.util.concurrent.TimeUnit
+import javax.inject.Singleton
 
 
 @Module
@@ -17,4 +33,58 @@ class AppModule {
         .add(EmptyStringAdapter)
         .add(KotlinJsonAdapterFactory())
         .build()
+
+    @Provides
+    fun provideBaseUrl() = AppConstant.URL
+
+    @Provides
+    @Singleton
+    fun providesOkHttpClient(@ApplicationContext context: Context): OkHttpClient {
+
+        val interceptor = HttpLoggingInterceptor()
+        if (BuildConfig.DEBUG)
+            interceptor.level = HttpLoggingInterceptor.Level.BODY
+        val networkCacheInterceptor = createCacheInterceptor()
+        val client = OkHttpClient.Builder()
+            .addNetworkInterceptor(networkCacheInterceptor)
+            .connectTimeout(120, TimeUnit.SECONDS)
+            .writeTimeout(120, TimeUnit.SECONDS)
+            .readTimeout(120, TimeUnit.SECONDS)
+            .addInterceptor(interceptor)
+
+
+
+        return client.build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideRetrofit(
+        okHttpClient: OkHttpClient
+    ): Retrofit =
+        Retrofit.Builder()
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .baseUrl(AppConstant.URL)
+            .client(okHttpClient)
+            .build()
+
+    @Provides
+    @Singleton
+    fun provideApiService(retrofit: Retrofit): ApiService = retrofit.create(ApiService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideApiHelper(apiHelper: ApiHelperImpl): ApiHelper = apiHelper
+
+    private fun createCacheInterceptor(): Interceptor {
+        return Interceptor { chain ->
+            val response = chain.proceed(chain.request())
+            var cacheControl = CacheControl.Builder()
+                .maxAge(1, TimeUnit.MINUTES)
+                .build()
+            response.newBuilder()
+                .header("Cache-Control", cacheControl.toString())
+                .build()
+        }
+    }
 }

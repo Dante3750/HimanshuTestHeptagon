@@ -1,25 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
 
         <variable
             name="mylist"
-            type="com.example.himanshutestheptagon.data.model.ItemList" />
+            type="com.example.himanshutestheptagon.data.model.Question" />
 
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout13"
         android:padding="5dp"
-        android:layout_marginBottom="10dp"
+        android:id="@+id/constraintLayout13"
+        android:background="@color/teal_700"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+
+        <TextView
+            android:textColor="@color/black"
+            android:id="@+id/tv_question_no"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{`Question :`+mylist.question}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_marginTop="5dp"
+            android:textColor="@color/black"
+            android:id="@+id/tv_error_msg"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{`Error Message :`+mylist.error_message}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_question_no" />
+
+
+
+        <TextView
+            android:layout_marginTop="5dp"
+            android:textColor="@color/black"
+            android:id="@+id/tv_question_Type"
+            android:layout_width="0dp"
+            android:text="@{`Type :`+mylist.type}"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_error_msg" />
+
+        <EditText
+            android:layout_marginTop="5dp"
+            android:textColor="@color/black"
+            android:id="@+id/et_answers"
+            android:layout_width="0dp"
+            android:text="@{mylist.answers}"
+            android:layout_height="wrap_content"
+            android:hint="@string/please_enter_your_answer"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_question_Type" />
+
+        <RadioGroup
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_question_Type"
+            android:orientation="vertical"
+            android:id="@+id/rg_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <LinearLayout
+            android:id="@+id/ll_field"
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_question_Type"
+            />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

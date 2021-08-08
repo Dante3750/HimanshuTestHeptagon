@@ -7,6 +7,6 @@ import javax.inject.Inject
 
 class ApiHelperImpl @Inject constructor(private val apiService: ApiService) : ApiHelper {
     override suspend fun getListData(): Response<ItemList> {
-        return apiService.getListdata(AppConstant.URL)
+        return apiService.getListdata(AppConstant.LIST_URL)
     }
 }

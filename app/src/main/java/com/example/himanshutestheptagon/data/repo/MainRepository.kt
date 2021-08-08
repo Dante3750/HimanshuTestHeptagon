@@ -5,7 +5,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class AccountDetailsRepository @Inject constructor(
+class MainRepository @Inject constructor(
     private val apiHelper: ApiHelper
 ) {
     suspend fun getListData() =
@@ -16,10 +16,5 @@ class AccountDetailsRepository @Inject constructor(
             }
             return@withContext netResObject.body()
         }
-
-
-
-
-
 
 }

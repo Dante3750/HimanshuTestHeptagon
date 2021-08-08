@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">HimanshuTestHeptagon</string>
+    <string name="error_message">Error Message</string>
+    <string name="question_no">Question No</string>
+    <string name="question_id">Question Id</string>
+    <string name="question_type">Question Type</string>
+    <string name="please_enter_your_answer">Please Enter Your Answer</string>
 </resources>

@@ -12,6 +12,6 @@ data class Question(
     val question: String,
     val question_id: Int,
     val type: String,
-    val url: String,
+    val url: String?,
     val values: List<Value>
 )
