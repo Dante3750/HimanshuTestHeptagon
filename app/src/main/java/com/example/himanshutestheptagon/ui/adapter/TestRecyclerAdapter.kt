@@ -1,16 +1,22 @@
 package com.example.himanshutestheptagon.ui.adapter
 
+import android.R
 import android.annotation.SuppressLint
 import android.content.Context
+import android.text.InputFilter
+import android.text.InputFilter.LengthFilter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RadioButton
-import androidx.lifecycle.LifecycleOwner
+import android.widget.*
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.himanshutestheptagon.data.model.Question
+import com.example.himanshutestheptagon.data.model.Value
 import com.example.himanshutestheptagon.databinding.ListItemTestBinding
 import java.util.*
+import java.util.regex.Pattern
+import kotlin.collections.ArrayList
 
 
 internal class TestRecyclerAdapter(val mListener: (Question) -> Unit) :
@@ -97,12 +103,30 @@ internal class TestRecyclerAdapter(val mListener: (Question) -> Unit) :
             else if (data.type=="radio"){
                 binding.etAnswers.visibility = View.GONE
                 for (element in data.values) {
-                    val rbn = RadioButton(context)
-                    rbn.id = View.generateViewId()
-                    val textString : String = element.value.toString()
-                    rbn.text = textString.trim()
-                    binding.rgList.addView(rbn)
+                    addRadioButtonLive(binding,element)
+                    addRadioDates(binding,element)
                 }
+            }
+
+            else if (data.type=="multiselect"){
+                binding.etAnswers.visibility = View.GONE
+                for (element in data.values) {
+                    addCheckBoxLive(binding,element)
+                }
+            }
+
+            else if (data.type=="dropdown") {
+                binding.etAnswers.visibility = View.GONE
+                val list = ArrayList<String>()
+                for (element in data.values) {
+                    list.add(element.value)
+                }
+                addDropDownLive(binding, list)
+            }
+
+            else if (data.type=="imageview") {
+                binding.etAnswers.visibility = View.GONE
+                loadImage()
             }
             else{
                 binding.etAnswers.visibility = View.GONE
@@ -116,6 +140,82 @@ internal class TestRecyclerAdapter(val mListener: (Question) -> Unit) :
                 list1 = items
             }
 
+        }
+
+        private fun loadImage() {
+            TODO("Not yet implemented")
+        }
+
+        private fun addDropDownLive(binding: ListItemTestBinding, element: ArrayList<String>) {
+            val spinner = Spinner(context)
+            val arrayAdapter = ArrayAdapter(context!!, android.R.layout.simple_spinner_item, element)
+            spinner.adapter = arrayAdapter
+            binding.llField.addView(spinner)
+        }
+
+        private fun addCheckBoxLive(binding: ListItemTestBinding, element: Value) {
+            val checkBox = CheckBox(context)
+            val textString  = element.value
+            checkBox.text = textString
+            checkBox.layoutParams =
+                LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+            checkBox.setOnCheckedChangeListener { buttonView, isChecked ->
+                val msg =
+                    "You have " + (if (isChecked) "checked $textString" else "unchecked $textString") + " this Check it Checkbox."
+                Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+            }
+
+            // Add Checkbox to LinearLayout
+
+            // Add Checkbox to LinearLayout
+            if (binding.llField != null) {
+                binding.llField.orientation = LinearLayout.VERTICAL
+                binding.llField.addView(checkBox)
+            }
+
+        }
+
+        private fun addRadioDates(binding: ListItemTestBinding, element: Value) {
+            val et = EditText(context)
+            val p = LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                1.0f
+
+            )
+            et.layoutParams = p
+            et.id = View.generateViewId()
+            val textString : String = element.value.toString()
+            et.setText(textString)
+            et.isEnabled = true
+            val filter =
+                InputFilter { source, start, end, dest, dstart, dend ->
+                    for (i in start until end) {
+                        if (!Pattern.compile("[1234567890]*")
+                                .matcher(
+                                    source[i].toString()
+                                ).matches()
+                        ) {
+                            return@InputFilter ""
+                        }
+                    }
+                    null
+                }
+            et.filters = arrayOf<InputFilter>(filter, LengthFilter(4))
+            et.setBackgroundResource(R.drawable.editbox_background)
+            et.setCompoundDrawablesWithIntrinsicBounds(null, null, ContextCompat.getDrawable(context!!,R.drawable.ic_menu_my_calendar), null)
+            binding.llField.addView(et)
+        }
+
+        private fun addRadioButtonLive(binding: ListItemTestBinding, element: Value) {
+            val rbn = RadioButton(context)
+            rbn.id = View.generateViewId()
+            val textString  = element.value
+            rbn.text = textString
+            binding.rgList.addView(rbn)
         }
 
 

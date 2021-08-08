@@ -80,12 +80,12 @@
 
         <LinearLayout
             android:id="@+id/ll_field"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_question_Type"
+            app:layout_constraintTop_toBottomOf="@+id/rg_list"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

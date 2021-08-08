@@ -4,5 +4,5 @@ data class Value(
     val id: Int,
     val image_url: String,
     val selected: Int,
-    val value: Any
+    val value: String
 )
