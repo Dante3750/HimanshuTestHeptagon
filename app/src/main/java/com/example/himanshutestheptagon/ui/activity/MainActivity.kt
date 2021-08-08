@@ -9,7 +9,6 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import com.example.himanshutestheptagon.R
 import com.example.himanshutestheptagon.data.model.Question
 import com.example.himanshutestheptagon.databinding.ActivityMainBinding
@@ -57,6 +56,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun retry() {
         binding.llRetry.setOnClickListener {
+            listItemData.clear()
+            adapter.notifyDataSetChanged()
             setItems()
         }
     }
