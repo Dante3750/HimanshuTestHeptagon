@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.himanshutestheptagon.data.model.Question
 import com.example.himanshutestheptagon.data.model.Value
 import com.example.himanshutestheptagon.databinding.ListItemTestBinding
+import com.squareup.picasso.Picasso
 import java.util.*
 import java.util.regex.Pattern
 import kotlin.collections.ArrayList
@@ -137,6 +138,7 @@ internal class TestRecyclerAdapter(val mListener: (Question) -> Unit) :
                 Log.d("himanshu", "onBind: ${data.url.toString()}")
                 binding.etAnswers.visibility = View.GONE
                 binding.llField.visibility = View.GONE
+                data.url = "https://dummyimage.com/2500x1000/000/fff.gif&text=Image+was+not+working+so+I+added+Dummy+image+from+site+for+this+Item,+this+image+is+fetched+from+URL+as+well."
             }
             else{
                 binding.etAnswers.visibility = View.GONE
